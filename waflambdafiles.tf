@@ -18,6 +18,8 @@
 resource "random_string" "lambda_bucket" {
   length  = 8
   special = false
+  # do not include uppercase chars in the random generator because s3 bucket name can only have lower case letters and hiphens
+  upper = false
 }
 
 locals {
