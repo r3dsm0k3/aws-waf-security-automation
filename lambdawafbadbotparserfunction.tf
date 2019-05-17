@@ -20,7 +20,7 @@ resource "aws_lambda_function" "LambdaWAFBadBotParserFunction" {
     description = "This lambda function will intercepts and inspects trap endpoint requests to extract its IP address, and then add it to an AWS WAF block list."
     role = "${aws_iam_role.LambdaRoleBadBot.arn}"
     handler = "access-handler.lambda_handler"
-    s3_bucket = "${var.customer}-waflambdafiles"
+    s3_bucket = "${aws_s3_bucket.WAFLambdaFiles.id}"
     s3_key = "access-handler.zip"
     runtime = "python2.7"
     memory_size = "128"
@@ -39,6 +39,8 @@ resource "aws_lambda_function" "LambdaWAFBadBotParserFunction" {
             WAFBlockPeriod = "${var.WAFBlockPeriod}"
             WAFBadBotSet = "${aws_waf_ipset.WAFBadBotSet.id}"
             SendAnonymousUsageData = "${var.SendAnonymousUsageData}"
+            LOG_TYPE = "${var.LogType}"
+            REGION = "${var.aws_region}"
             UUID = "${uuid()}"
         }
     }
